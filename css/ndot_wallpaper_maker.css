@@ -3,10 +3,10 @@
 */
 
 /* ページ全体のスタイル */
-/* フォントにfontフォルダ内にあるNdot77JPExtendedv1.1.4.ttfを使用 */
+/* フォントにfontフォルダ内にあるNdot77JPExtendedv1.1.4.woff2を使用 */
 @font-face {
     font-family: 'Ndot77JPExtendedv1.1.4';
-    src: url('../fonts/Ndot77JPExtendedv1.1.4.ttf') format('truetype');
+    src: url('../fonts/Ndot77JPExtendedv1.1.4.woff2') format('woff2'),
 }
 
 body {
