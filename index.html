@@ -27,17 +27,27 @@
             <p>背景色
                 <input type="color" id="background_color_input" value="#f0f0f0">
             </p>
-            <!--テキスト内容（長文、htmlタグ使用可能）-->
-            <p>テキスト（htmlタグ使用可能）<br>
-            <textarea id="text_input">ここにテキストを入力してください</textarea>
+            <!--テキスト内容-->
+            <p>テキスト<br>
+            <textarea id="text_input">
+NOTHINGはロンドンを拠点とするデジタル製品企業で、
+人と技術の間にある障壁を取り除き、シームレスなデジタルの未来を
+創造することを使命としています。
+NOTHINGでは、芸術性、信頼性、
+そしてクラフトマンシップを重視した象徴的な製品を開発することで、
+テクノロジーに情熱を取り戻したいと考えています。
+最終的には、自分の家族や親しい友人と共有することを
+誇りに思える製品を作りたいと考えています。シンプルに。
+美しい技術は複雑であってはならないからです。(Nothing公式サイトより)
+</textarea>
             </p>
             <!--テキストの色-->
             <p>テキストの色
-                <input type="color" id="font_color_input" value="#000000">
+                <input type="color" id="font_color_input" value="#181818">
             </p>
             <!--フォントサイズ-->
             <p>テキストのサイズ
-                <input type="number" id="font_size_input" value="20">px
+                <input type="number" id="font_size_input" value="40">px
             </p>
             <!--テキストの方向（一つだけボタンで選択）-->
             <p>テキストの方向
@@ -49,7 +59,7 @@
                 <input type="radio" name="size" value="Nothing Phone(1)" checked>Nothing Phone(1)<br>
                 <input type="radio" name="size" value="Nothing Phone(2)">Nothing Phone(2)<br>
                 <input type="radio" name="size" value="Nothing Phone(2a)">Nothing Phone(2a)<br>
-                <input type="radio" name="size" value="custom" onclick="enableCustomSize()">カスタム <input type="number" id="width_input" value="1080">x<input type="number" id="height_input" value="1920">px
+                <input type="radio" name="size" value="custom">カスタム <input type="number" id="width_input" value="1080">x<input type="number" id="height_input" value="1920">px
             </p>
             <p>余白
                 <input type="number" id="margin_input" value="10">px
@@ -74,7 +84,7 @@
     </p>
     <div id="preview">
         <center>
-        <canvas id="preview_canvas"></canvas>
+        <canvas id="preview_canvas" style="max-width: 90%;"></canvas>
         <script>
             var canvas = document.getElementById("preview_canvas");
             var ctx = canvas.getContext("2d");
@@ -91,9 +101,9 @@
                 // キャンバスのサイズを設定
                 var selectedSize = document.querySelector('input[name="size"]:checked').value;
                 var sizeList = {
-                    "Nothing Phone(1)": { width: 100, height: 200 },
-                    "Nothing Phone(2)": { width: 300, height: 100 },
-                    "Nothing Phone(2a)": { width: 500, height: 100 },
+                    "Nothing Phone(1)": { width: 1242, height: 2760 },
+                    "Nothing Phone(2)": { width: 1242, height: 2760 },
+                    "Nothing Phone(2a)": { width: 1084, height: 2412 },
                     "custom": { width: parseInt(width_input.value), height: parseInt(height_input.value) }
                 };
                 canvas.width = sizeList[selectedSize].width;
@@ -104,16 +114,20 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                 // テキストを設定
-                var font = new FontFace('Ndot77JPExtended', 'url(https://github.com/shibadogcap/ndot_wallpaper_maker/blob/main/fonts/Ndot77JPExtendedv1.1.4.woff2)');
+                var font = new FontFace('Ndot77JPExtended', 'url(fonts/Ndot77JPExtendedv1.1.4.woff2)');
                 font.load().then(function(loadedFont) {
                     document.fonts.add(loadedFont);
                     ctx.font = font_size_input.value + "px 'Ndot77JPExtended'";
                     ctx.fillStyle = font_color_input.value;
-                    // テキスト描画を呼び出す前に再帰呼び出しを削除
-                    // draw();
-                }).catch(function(error) {
-                    console.log('Font loading failed: ' + error);
+                    // テキストの変更を適応
+                    drawText();
                 });
+            }
+
+            var text_input = document.getElementById("text_input"); // Add missing variable declaration
+            var text_direction = document.getElementsByName("text_direction"); // Add missing variable declaration
+
+            function drawText() {
                 var text = text_input.value;
                 var textWidth = ctx.measureText(text).width;
                 var textHeight = parseInt(font_size_input.value);
@@ -124,7 +138,7 @@
                     ctx.translate(canvas.width / 2, canvas.height / 2);
                     ctx.rotate(-Math.PI / 2);
                     ctx.textAlign = "center";
-                    ctx.fillText(text, 0, 0);
+                    ctx.fillText(text, x, y);
                     ctx.restore();
                 } else {
                     ctx.textAlign = "center";
@@ -133,21 +147,6 @@
             }
 
             // 設定が変更されたらプレビューを更新
-            var inputs = document.querySelectorAll("input");
-            for (var i = 0; i < inputs.length; i++) {
-                inputs[i].addEventListener("input", draw);
-            }
-            var textareas = document.querySelectorAll("textarea");
-            for (var i = 0; i < textareas.length; i++) {
-                textareas[i].addEventListener("input", draw);
-            }
-            var radios = document.querySelectorAll("input[type=radio]");
-            for (var i = 0; i < radios.length; i++) {
-                radios[i].addEventListener("change", draw);
-            }
-            draw();
-
-            //設定が変更されたらプレビューを更新
             var inputs = document.querySelectorAll("input");
             for (var i = 0; i < inputs.length; i++) {
                 inputs[i].addEventListener("input", draw);
