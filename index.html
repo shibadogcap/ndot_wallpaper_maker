@@ -47,7 +47,7 @@ NOTHINGでは、芸術性、信頼性、
             </p>
             <!--フォントサイズ-->
             <p>テキストのサイズ
-                <input type="number" id="font_size_input" value="40">px
+                <input type="number" id="font_size_input" value="125">px
             </p>
             <!--テキストの方向（一つだけボタンで選択）-->
             <p>テキストの方向
@@ -97,6 +97,46 @@ NOTHINGでは、芸術性、信頼性、
             var height_input = document.getElementById("height_input");
             var margin_input = document.getElementById("margin_input");
 
+            // テキストを横幅に収まるように分割
+            function splitText() {
+                var text = text_input.value;
+                var textWidth = ctx.measureText(text).width;
+                var textHeight = parseInt(font_size_input.value);
+                var maxWidth = canvas.width - margin_input.value * 2;
+                var maxHeight = canvas.height - margin_input.value * 2;
+                var lines = [];
+                var line = "";
+                if (text_direction[0].checked) {
+                    var textLine = line + text;
+                    var textWidth = ctx.measureText(textLine).width;
+                    for (var i = 0; i < text.length; i++) {
+                        var testLine = line + text[i];
+                        var testWidth = ctx.measureText(testLine).width;
+                        if (testWidth > maxWidth) {
+                            lines.push(line);
+                            line = text[i];
+                        } else {
+                            line = testLine;
+                        }
+                    }
+                }else{
+                    var textLine = line + text;
+                    var textHeight = ctx.measureText(textLine).height
+                    for (var i = 0; i < text.length; i++) {
+                        var testLine = line + text[i];
+                        var testHeight = textHeight * testLine.length;
+                        if (testHeight > maxHeight) {
+                            lines.push(line);
+                            line = text[i];
+                        } else {
+                            line = testLine;
+                        }
+                    }
+                }
+                lines.push(line);
+                return lines;
+            }
+
             function draw() {
                 // キャンバスのサイズを設定
                 var selectedSize = document.querySelector('input[name="size"]:checked').value;
@@ -128,21 +168,21 @@ NOTHINGでは、芸術性、信頼性、
             var text_direction = document.getElementsByName("text_direction"); // Add missing variable declaration
 
             function drawText() {
-                var text = text_input.value;
-                var textWidth = ctx.measureText(text).width;
+                var lines = splitText();
+                var textWidth = ctx.measureText(lines[0]).width;
                 var textHeight = parseInt(font_size_input.value);
                 var x = (canvas.width - textWidth) / 2;
-                var y = (canvas.height + textHeight) / 2;
-                if (text_direction[1].checked) {
-                    ctx.save();
-                    ctx.translate(canvas.width / 2, canvas.height / 2);
-                    ctx.rotate(-Math.PI / 2);
-                    ctx.textAlign = "center";
-                    ctx.fillText(text, x, y);
-                    ctx.restore();
-                } else {
-                    ctx.textAlign = "center";
-                    ctx.fillText(text, x, y);
+                var y = (canvas.height - textHeight * lines.length) / 2;
+                for (var i = 0; i < lines.length; i++) {
+                    if (text_direction[0].checked) {
+                        ctx.fillText(lines[i], x, y + textHeight * (i + 1));
+                    } else {
+                        ctx.save();
+                        ctx.translate(x, y);
+                        ctx.rotate(-Math.PI / 2);
+                        ctx.fillText(lines[i], 0, textHeight * (i + 1));
+                        ctx.restore();
+                    }
                 }
             }
 
