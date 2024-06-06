@@ -29,7 +29,7 @@
             </p>
             <!--テキスト内容-->
             <p>テキスト<br>
-            <textarea id="text_input">
+            <textarea id="text_input" style="width: 70%" rows="5" placeholder="ここにテキストを入力してください。">
 NOTHINGはロンドンを拠点とするデジタル製品企業で、
 人と技術の間にある障壁を取り除き、シームレスなデジタルの未来を
 創造することを使命としています。
@@ -38,8 +38,7 @@ NOTHINGでは、芸術性、信頼性、
 テクノロジーに情熱を取り戻したいと考えています。
 最終的には、自分の家族や親しい友人と共有することを
 誇りに思える製品を作りたいと考えています。シンプルに。
-美しい技術は複雑であってはならないからです。(Nothing公式サイトより)
-</textarea>
+美しい技術は複雑であってはならないからです。(Nothing公式サイトより)</textarea>
             </p>
             <!--テキストの色-->
             <p>テキストの色
@@ -200,6 +199,21 @@ NOTHINGでは、芸術性、信頼性、
                 radios[i].addEventListener("change", draw);
             }
             draw();
+        </script>
+        <!--ダウンロードボタン-->
+        <p>
+            <center>
+                <button id="download">ダウンロード</button>
+            </center>
+        </p>
+        <script>
+            document.getElementById("download").onclick = (event) => {
+                let canvas = document.getElementById("preview_canvas");
+                let link = document.createElement("a");
+                link.href = canvas.toDataURL("image/png");
+                link.download = "wallpaper.png";
+                link.click();
+            }
         </script>
 </body>
 </html>
