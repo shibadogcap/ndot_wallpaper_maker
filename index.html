@@ -204,6 +204,7 @@ NOTHINGでは、芸術性、信頼性、
         <p>
             <center>
                 <button id="download">ダウンロード</button>
+                <button id="share">シェア</button>
             </center>
         </p>
         <script>
@@ -213,6 +214,22 @@ NOTHINGでは、芸術性、信頼性、
                 link.href = canvas.toDataURL("image/png");
                 link.download = "wallpaper.png";
                 link.click();
+            }
+
+            document.getElementById("share").onclick = (event) => {
+                let canvas = document.getElementById("preview_canvas");
+                let dataUrl = canvas.toDataURL("image/png");
+                if (navigator.share) {
+                    navigator.share({
+                        title: "My Wallpaper",
+                        text: "Created with NDOT Wallpaper Maker",
+                        url: dataUrl
+                    })
+                    .then(() => console.log("Share successful"))
+                    .catch((error) => console.log("Share failed:", error));
+                } else {
+                    alert("Sharing is not supported on this device.");
+                }
             }
         </script>
 </body>
