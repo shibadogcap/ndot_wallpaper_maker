@@ -60,9 +60,12 @@ NOTHINGでは、芸術性、信頼性、
                 <input type="radio" name="size" value="Nothing Phone(2a)">Nothing Phone(2a)<br>
                 <input type="radio" name="size" value="custom">カスタム <input type="number" id="width_input" value="1080">x<input type="number" id="height_input" value="1920">px
             </p>
-            <p>余白
+            <p>余白（ヨコ）
                 <input type="number" id="margin_input" value="10">px
-        </div>
+            </p>
+            <p>余白（タテ）
+                <input type="number" id="margin_input" value="10">px
+            </p>
     </div>
 
     <script>
@@ -81,7 +84,7 @@ NOTHINGでは、芸術性、信頼性、
             ▼プレビュー（設定を入力すると表示されます）
         </center>
     </p>
-    <div id="preview">
+    <div id="preview"></div>
         <center>
         <canvas id="preview_canvas" style="max-width: 90%;"></canvas>
         <script>
@@ -94,7 +97,8 @@ NOTHINGでは、芸術性、信頼性、
             var text_direction = document.getElementsByName("text_direction");
             var width_input = document.getElementById("width_input");
             var height_input = document.getElementById("height_input");
-            var margin_input = document.getElementById("margin_input");
+            var margin_input_horizontal = document.getElementById("margin_input_horizontal");
+            var margin_input_vertical = document.getElementById("margin_input_vertical");
 
             // テキストを横幅に収まるように分割
             function splitText() {
@@ -223,7 +227,7 @@ NOTHINGでは、芸術性、信頼性、
                     navigator.share({
                         title: "My Wallpaper",
                         text: "Created with NDOT Wallpaper Maker",
-                        url: dataUrl
+                        image: dataUrl
                     })
                     .then(() => console.log("Share successful"))
                     .catch((error) => console.log("Share failed:", error));
